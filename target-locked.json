@@ -34,7 +34,7 @@
     "generate_hex": true, 
     "libraries": [
         {
-            "branch": "master", 
+            "branch": "9643ee76d2af1eb501f70d5d8cbc405ab7a42291", 
             "name": "codal-core", 
             "type": "git", 
             "url": "https://github.com/lancaster-university/codal-core"
@@ -43,7 +43,7 @@
             "branch": "master", 
             "name": "codal-mbedos", 
             "type": "git", 
-            "url": "https://github.com/lancaster-university/codal-mbedos"
+            "url": "https://github.com/Palomino34/codal-mbedos"
         }
     ], 
     "linker_flags": "-Wl,--no-wchar-size-warning -Wl,-wrap,main -Wl,--gc-sections -Wl,--wrap,exit -Wl,--wrap,atexit -mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=softfp ", 
