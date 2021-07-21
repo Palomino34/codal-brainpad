@@ -2,6 +2,10 @@
 #include "codal_target_hal.h"
 #include "CodalDmesg.h"
 
+void wait_ms(uint32_t milliseconds) {
+	wait_ns(milliseconds * 1000)
+}
+
 void target_enable_irq()
 {
     __enable_irq();
