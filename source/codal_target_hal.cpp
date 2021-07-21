@@ -84,8 +84,7 @@ PROCESSOR_WORD_TYPE fiber_initial_stack_base()
 	#error 111111111111111111111111111111111111111111
     extern osThreadDef_t os_thread_def_main;
     mbed_stack_base = (uint32_t)os_thread_def_main.stack_pointer + os_thread_def_main.stacksize;
-#else
-	#error 22222222222222222222222222222222222222222
+#else	
     mbed_stack_base = DEVICE_STACK_BASE;
 #endif
 
