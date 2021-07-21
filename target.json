@@ -45,8 +45,8 @@
         },
         {
             "name":"codal-mbedos",
-            "url":"https://github.com/ghi-electronics/codal-mbedos",
-            "branch":"add_pulse",
+            "url":"https://github.com/Palomino34/codal-mbedos",
+            "branch":"master",
             "type":"git"
         }
     ]
