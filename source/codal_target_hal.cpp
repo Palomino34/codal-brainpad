@@ -80,8 +80,7 @@ PROCESSOR_WORD_TYPE fiber_initial_stack_base()
 {
     uint32_t mbed_stack_base;
 
-#ifdef MBED_CONF_RTOS_PRESENT
-	#error 111111111111111111111111111111111111111111
+#ifdef MBED_CONF_RTOS_PRESENT	
     extern osThreadDef_t os_thread_def_main;
     mbed_stack_base = (uint32_t)os_thread_def_main.stack_pointer + os_thread_def_main.stacksize;
 #else	
