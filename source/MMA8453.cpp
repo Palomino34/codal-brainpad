@@ -38,7 +38,7 @@ void MMA8453::writeRegister(uint8_t reg, uint8_t val) {
     data[0] = reg;
     data[1] = val;
 
-    if (i2c == nullptr)
+    if (&i2c == nullptr)
 		return;
 	
 	i2c.write(address, data, 2, 0);
@@ -48,7 +48,7 @@ int MMA8453::updateSample() {
     int divisor = rangeDivisor.get(this->getRange());
     uint8_t data[6];
 	
-	if (i2c == nullptr)
+	if (&i2c == nullptr)
 		return DEVICE_OK;
     
 
