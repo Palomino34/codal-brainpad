@@ -6,7 +6,7 @@
         "MBED_LEGACY_TOOLCHAIN": "GCC_ARM;"
     }, 
     "config": {
-        "CODAL_DEBUG": "CODAL_DEBUG_DISABLED", 
+        "CODAL_DEBUG": "CODAL_DEBUG", 
         "CODAL_TIMESTAMP": "uint64_t", 
         "DEVICE_COMPONENT_COUNT": 60, 
         "DEVICE_DEFAULT_PULLMODE": "PullMode::None", 
