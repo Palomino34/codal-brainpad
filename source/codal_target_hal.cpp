@@ -3,7 +3,7 @@
 #include "CodalDmesg.h"
 
 void wait_ms(uint32_t milliseconds) {
-	wait_us(milliseconds * 1000);
+	//wait_ns(milliseconds * 1000*);
 }
 
 void target_enable_irq()
