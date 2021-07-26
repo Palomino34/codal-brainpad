@@ -2,6 +2,7 @@ MBED_APP_SIZE = 512k;
 MBED_APP_START = 0x08000000;
 MBED_BOOT_STACK_SIZE = 0x400;
 STACK_SIZE = MBED_BOOT_STACK_SIZE;
+M_CRASH_DATA_RAM_SIZE = 0x100;
 
 /* Linker script to configure memory regions. */
 /* 0x18C resevered for vectors; 8-byte aligned = 0x190 (0x18C + 0x4)*/
