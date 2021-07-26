@@ -3,7 +3,7 @@
 
 #include <string>
 
-BrainPad bp;
+BrainPad bp;11111111111111111111111
 
 uint8_t vram[128 * 64 / 8];
 uint8_t* font = new uint8_t[95 * 5] {
