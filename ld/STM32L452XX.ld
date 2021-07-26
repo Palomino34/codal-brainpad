@@ -9,8 +9,8 @@ M_CRASH_DATA_RAM_SIZE = 0x100;
 MEMORY
 {
   FLASH (rx)   : ORIGIN = 0x08000000, LENGTH = 512k
-  SRAM2 (rwx)  : ORIGIN = 0x20017700, LENGTH = 32k - (0x200)
-  SRAM1 (rwx)  : ORIGIN = 0x20000200, LENGTH = 90k - 0x200
+  SRAM2 (rwx)  : ORIGIN = 0x10000B00, LENGTH = 32k - (0x200)
+  SRAM1 (rwx)  : ORIGIN = 0x20000200, LENGTH = 128k - 0x200
 }
 
 /* Linker script to place sections and symbol values. Should be used together
