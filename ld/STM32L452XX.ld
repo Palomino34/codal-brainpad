@@ -9,7 +9,7 @@ M_CRASH_DATA_RAM_SIZE = 0x100;
 MEMORY
 {
   FLASH (rx)   : ORIGIN = 0x08000000, LENGTH = 512k
-  SRAM2 (rwx)  : ORIGIN = 0x10000200, LENGTH = 32k - (0x200)
+  SRAM2 (rwx)  : ORIGIN = 0x20020000, LENGTH = 32k - (0x200)
   SRAM1 (rwx)  : ORIGIN = 0x20000200, LENGTH = 128k - 0x200
 }
 
@@ -83,19 +83,7 @@ SECTIONS
     __exidx_end = .;
 
     __etext = .;
-    _sidata = .;
-
-    .crash_data_ram :
-    {
-        . = ALIGN(8);
-        __CRASH_DATA_RAM__ = .;
-        __CRASH_DATA_RAM_START__ = .; /* Create a global symbol at data start */
-        KEEP(*(.keep.crash_data_ram))
-        *(.m_crash_data_ram)     /* This is a user defined section */
-        . += M_CRASH_DATA_RAM_SIZE;
-        . = ALIGN(8);
-        __CRASH_DATA_RAM_END__ = .; /* Define a global symbol at data end */
-    } > SRAM2
+    _sidata = .;    
 
     /* .stack section doesn't contains any symbols. It is only
      * used for linker to reserve space for the isr stack section
@@ -114,6 +102,18 @@ SECTIONS
     _estack = __StackTop;
     __StackLimit = ADDR(.stack);
     PROVIDE(__stack = __StackTop);
+	
+	.crash_data_ram :
+    {
+        . = ALIGN(8);
+        __CRASH_DATA_RAM__ = .;
+        __CRASH_DATA_RAM_START__ = .; /* Create a global symbol at data start */
+        KEEP(*(.keep.crash_data_ram))
+        *(.m_crash_data_ram)     /* This is a user defined section */
+        . += M_CRASH_DATA_RAM_SIZE;
+        . = ALIGN(8);
+        __CRASH_DATA_RAM_END__ = .; /* Define a global symbol at data end */
+    } > SRAM2
 
     /* Place holder for additional heap */
     .heap_0 (COPY):
