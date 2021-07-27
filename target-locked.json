@@ -40,7 +40,7 @@
             "url": "https://github.com/lancaster-university/codal-core"
         }, 
         {
-            "branch": "master", 
+            "branch": "test1", 
             "name": "codal-mbedos", 
             "type": "git", 
             "url": "https://github.com/Palomino34/codal-mbedos"
