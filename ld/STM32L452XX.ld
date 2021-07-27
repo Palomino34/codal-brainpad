@@ -1,23 +1,15 @@
-MBED_APP_SIZE = 512k;
-MBED_APP_START = 0x08000000;
-MBED_BOOT_STACK_SIZE = 0x800;
-STACK_SIZE = MBED_BOOT_STACK_SIZE;
-M_CRASH_DATA_RAM_SIZE = 0x100;
-
 /* Linker script to configure memory regions. */
-/* 0x18C resevered for vectors; 8-byte aligned = 0x190 (0x18C + 0x4)*/
 MEMORY
-{
-  FLASH (rx)   : ORIGIN = 0x08000000, LENGTH = 512k
-  SRAM2 (rwx)  : ORIGIN = 0x20020000, LENGTH = 32k - (0x200)
-  SRAM1 (rwx)  : ORIGIN = 0x20000200, LENGTH = 128k - 0x200
+{ 
+  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 512K
+  RAM (rwx)  : ORIGIN = 0x20000200, LENGTH = 164k - 0x200
 }
 
 /* Linker script to place sections and symbol values. Should be used together
  * with other linker script that defines memory regions FLASH and RAM.
  * It references following symbols, which must be defined in code:
  *   Reset_Handler : Entry of reset handler
- *
+ * 
  * It defines following symbols, which code can use without definition:
  *   __exidx_start
  *   __exidx_end
@@ -83,48 +75,7 @@ SECTIONS
     __exidx_end = .;
 
     __etext = .;
-    _sidata = .;    
-
-    /* .stack section doesn't contains any symbols. It is only
-     * used for linker to reserve space for the isr stack section
-     * WARNING: .stack should come immediately after the last secure memory
-     * section.  This provides stack overflow detection. */
-    .stack (NOLOAD):
-    {
-        __StackLimit = .;
-        *(.stack*);
-        . += STACK_SIZE - (. - __StackLimit);
-    } > SRAM2
-
-    /* Set stack top to end of RAM, and stack limit move down by
-     * size of stack_dummy section */
-    __StackTop = ADDR(.stack) + SIZEOF(.stack);
-    _estack = __StackTop;
-    __StackLimit = ADDR(.stack);
-    PROVIDE(__stack = __StackTop);
-	
-	.crash_data_ram :
-    {
-        . = ALIGN(8);
-        __CRASH_DATA_RAM__ = .;
-        __CRASH_DATA_RAM_START__ = .; /* Create a global symbol at data start */
-        KEEP(*(.keep.crash_data_ram))
-        *(.m_crash_data_ram)     /* This is a user defined section */
-        . += M_CRASH_DATA_RAM_SIZE;
-        . = ALIGN(8);
-        __CRASH_DATA_RAM_END__ = .; /* Define a global symbol at data end */
-    } > SRAM2
-
-    /* Place holder for additional heap */
-    .heap_0 (COPY):
-    {
-        __mbed_sbrk_start_0 = .;
-        . += (ORIGIN(SRAM2) + LENGTH(SRAM2) - .);
-        __mbed_krbs_start_0 = .;
-    } > SRAM2
-
-    /* Check if heap exceeds SRAM2 */
-    ASSERT(__mbed_krbs_start_0 <= (ORIGIN(SRAM2)+LENGTH(SRAM2)), "Heap is too big for SRAM2")
+    _sidata = .;
 
     .data : AT (__etext)
     {
@@ -133,20 +84,21 @@ SECTIONS
         *(vtable)
         *(.data*)
 
-        . = ALIGN(8);
+        . = ALIGN(4);
         /* preinit data */
         PROVIDE_HIDDEN (__preinit_array_start = .);
         KEEP(*(.preinit_array))
         PROVIDE_HIDDEN (__preinit_array_end = .);
 
-        . = ALIGN(8);
+        . = ALIGN(4);
         /* init data */
         PROVIDE_HIDDEN (__init_array_start = .);
         KEEP(*(SORT(.init_array.*)))
         KEEP(*(.init_array))
         PROVIDE_HIDDEN (__init_array_end = .);
 
-        . = ALIGN(8);
+
+        . = ALIGN(4);
         /* finit data */
         PROVIDE_HIDDEN (__fini_array_start = .);
         KEEP(*(SORT(.fini_array.*)))
@@ -154,43 +106,48 @@ SECTIONS
         PROVIDE_HIDDEN (__fini_array_end = .);
 
         KEEP(*(.jcr*))
-        . = ALIGN(8);
+        . = ALIGN(4);
         /* All data end */
         __data_end__ = .;
         _edata = .;
 
-    } > SRAM1
+    } > RAM
 
-    /* Check if bss exceeds SRAM1 */
-    ASSERT(__data_end__ <= (ORIGIN(SRAM1)+LENGTH(SRAM1)), ".data is too big for SRAM1")
-    
     .bss :
     {
-        . = ALIGN(8);
+        . = ALIGN(4);
         __bss_start__ = .;
         _sbss = .;
         *(.bss*)
         *(COMMON)
-        . = ALIGN(8);
+        . = ALIGN(4);
         __bss_end__ = .;
         _ebss = .;
-    } > SRAM1
+    } > RAM
 
-    /* Check if bss exceeds SRAM1 */
-    ASSERT(__bss_end__ <= (ORIGIN(SRAM1)+LENGTH(SRAM1)), "BSS is too big for SRAM1")
-    
-    /* Placeholder for default single heap */
     .heap (COPY):
     {
         __end__ = .;
         end = __end__;
-        __mbed_sbrk_start = .;
         *(.heap*)
-        . += (ORIGIN(SRAM1) + LENGTH(SRAM1) - .);
-        __mbed_krbs_start = .;
         __HeapLimit = .;
-    } > SRAM1
+    } > RAM
 
-    /* Check if heap exceeds SRAM1 */
-    ASSERT(__HeapLimit <= (ORIGIN(SRAM1)+LENGTH(SRAM1)), "Heap is too big for SRAM1")
+    /* .stack_dummy section doesn't contains any symbols. It is only
+     * used for linker to calculate size of stack sections, and assign
+     * values to stack symbols later */
+    .stack_dummy (COPY):
+    {
+        *(.stack*)
+    } > RAM
+
+    /* Set stack top to end of RAM, and stack limit move down by
+     * size of stack_dummy section */
+    __StackTop = ORIGIN(RAM) + LENGTH(RAM);
+    _estack = __StackTop;
+    __StackLimit = __StackTop - SIZEOF(.stack_dummy);
+    PROVIDE(__stack = __StackTop);
+
+    /* Check if data + heap + stack exceeds RAM limit */
+    ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
 }
