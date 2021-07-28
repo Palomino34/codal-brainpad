@@ -40,9 +40,10 @@
 
 namespace codal {
     class MMA8453 : public Accelerometer {
-        codal::I2C&       i2c;
-        Pin&              int1;
+        codal::I2C& i2c;
+        Pin& int1;
         uint16_t          address;
+        bool 			  mylocker;
 
         void writeRegister(uint8_t reg, uint8_t val);
 
