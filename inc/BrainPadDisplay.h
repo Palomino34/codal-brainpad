@@ -2,10 +2,15 @@
 #define BPDISPLAY_H
 
 #include "I2C.h"
+#include "mbed.h"
+#include "CodalConfig.h"
+#include "MbedPin.h"
+#include "BrainPadPin.h"
 
 #include <cstdint>
 
 #define DISPLAY_DEFAULT_ADDRESS 0x78
+#define RESET_PIN_NAME PB_2
 
 namespace codal {
     class BrainPadDisplay {
@@ -18,8 +23,6 @@ namespace codal {
 
         void writeCommand(int command);
         void flush();
-		
-		_mbed::Pin& resetPin;
 
     public:
         BrainPadDisplay(codal::I2C& _i2c, uint16_t address = DISPLAY_DEFAULT_ADDRESS);
