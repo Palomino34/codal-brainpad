@@ -6,6 +6,7 @@ const int BrainPadDisplay::vramSize;
 
 BrainPadDisplay::BrainPadDisplay(codal::I2C& _i2c, uint16_t address) : i2c(_i2c) {
     this->address = address;
+	this->resetPin(ID_PIN_LCD_RESET, PB_2, PIN_CAPABILITY_AD);
 
     writeCommand(0xae);// turn off oled panel
     writeCommand(0x00);// set low column address

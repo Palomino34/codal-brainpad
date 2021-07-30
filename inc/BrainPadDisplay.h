@@ -18,6 +18,8 @@ namespace codal {
 
         void writeCommand(int command);
         void flush();
+		
+		_mbed::Pin& resetPin;
 
     public:
         BrainPadDisplay(codal::I2C& _i2c, uint16_t address = DISPLAY_DEFAULT_ADDRESS);
