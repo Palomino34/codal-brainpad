@@ -3,6 +3,7 @@
 #include "ErrorNo.h"
 #include "CodalCompat.h"
 #include "CodalFiber.h"
+#include "platform/mbed_wait_api.h"
 
 using namespace codal;
 
@@ -24,6 +25,7 @@ CREATE_KEY_VALUE_TABLE(rangeDivisor, rangeDivisorData);
 MMA8453::MMA8453(codal::I2C& _i2c, Pin& _int1, CoordinateSpace& coordinateSpace, uint16_t address, uint16_t id) : Accelerometer(coordinateSpace, id), i2c(_i2c), int1(_int1) {
 
     this->address = address;
+	this->mylocker = false;
 
     configure();
 }
@@ -45,7 +47,15 @@ void MMA8453::writeRegister(uint8_t reg, uint8_t val) {
 }
 
 int MMA8453::updateSample() {
-    int divisor = rangeDivisor.get(this->getRange());
+    if (this->mylocker) {
+		// while (this->mylocker) {
+			// wait_ms(1);
+		// }
+
+		return DEVICE_OK;
+	}
+
+	int divisor = rangeDivisor.get(this->getRange());
     uint8_t data[6];
 	
 	if (&i2c == nullptr)
@@ -71,8 +81,9 @@ int MMA8453::updateSample() {
 
         z *= 1024;
         z /= divisor;
-
+		this->mylocker = true;
         update({ -y, x, -z }); //To transform to ENU
+		this->mylocker = false;
     }
 
     return DEVICE_OK;
