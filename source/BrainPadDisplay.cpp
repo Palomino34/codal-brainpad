@@ -53,11 +53,11 @@ void BrainPadDisplay::writeCommand(int command) {
     data[0] = 0;
     data[1] = static_cast<uint8_t>(command);
 
-    // TQD i2c.write(address, data, 2, false);
+    i2c.write(address, data, 2, false);
 }
 
 void BrainPadDisplay::flush() {
-    // TQD i2c.write(address, vram, BrainPadDisplay::vramSize, false);
+    i2c.write(address, vram, BrainPadDisplay::vramSize, false);
 }
 
 void BrainPadDisplay::writeScreenBuffer(uint8_t* buffer) {
