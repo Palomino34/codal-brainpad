@@ -67,10 +67,10 @@ DEALINGS IN THE SOFTWARE.
 #define ID_PIN_SERVO_ONE    (DEVICE_ID_IO_P0 + 25)
 #define ID_PIN_SERVO_TWO    (DEVICE_ID_IO_P0 + 26)
 #define ID_PIN_INT          (DEVICE_ID_IO_P0 + 27)
-#define ID_PIN_BUTTON_UP    (DEVICE_ID_IO_P0 + 28)
-#define ID_PIN_BUTTON_DOWN  (DEVICE_ID_IO_P0 + 29)
-#define ID_PIN_BUTTON_LEFT  (DEVICE_ID_IO_P0 + 30)
-#define ID_PIN_BUTTON_RIGHT (DEVICE_ID_IO_P0 + 31)
+#define ID_PIN_BUTTON_A    (DEVICE_ID_IO_P0 + 28)
+#define ID_PIN_BUTTON_B  (DEVICE_ID_IO_P0 + 29)
+// #define ID_PIN_BUTTON_LEFT  (DEVICE_ID_IO_P0 + 30)
+// #define ID_PIN_BUTTON_RIGHT (DEVICE_ID_IO_P0 + 31)
 #define ID_PIN_TEMP_SENSOR  (DEVICE_ID_IO_P0 + 32)
 #define ID_PIN_LIGHT_SENSOR (DEVICE_ID_IO_P0 + 33)
 #define ID_PIN_LCD_RESET	(DEVICE_ID_IO_P0 + 34)
@@ -88,10 +88,10 @@ namespace codal
             _mbed::Pin        sda;
            BrainPadPin        temperaturePin;
            BrainPadPin        lightPin;
-            _mbed::Pin        buttonUp;
-            _mbed::Pin        buttonDown;
-            _mbed::Pin        buttonLeft;
-            _mbed::Pin        buttonRight;
+            _mbed::Pin        buttonA;
+            _mbed::Pin        buttonB;
+            // _mbed::Pin        buttonLeft;
+            // _mbed::Pin        buttonRight;
             _mbed::Pin        ledGreen;
             _mbed::Pin        ledBlue;
             _mbed::Pin        ledRed;

@@ -70,10 +70,10 @@ namespace codal
             BrainPadIO                  io;
             codal::_mbed::I2C           i2c;
             BrainPadDisplay             lcd;
-            Button                      buttonUp;
-            Button                      buttonDown;
-            Button                      buttonLeft;
-            Button                      buttonRight;
+            Button                      buttonA;
+            Button                      buttonB;
+            // Button                      buttonLeft;
+            // Button                      buttonRight;
             CoordinateSpace             space;
             MMA8453                     accelerometer;
             BrainPadTemperatureSensor   temperatureSensor;

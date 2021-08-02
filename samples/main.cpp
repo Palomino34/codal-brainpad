@@ -136,16 +136,16 @@ void DrawString(int x, int y, std::string text) {
 }
 
 void TestButtons() {
-    if (bp.buttonUp.isPressed())
+    if (bp.buttonA.isPressed())
         DrawString(1, 40, "UP   ");
 
-    if (bp.buttonLeft.isPressed())
-        DrawString(1, 40, "LEFT ");
+    // if (bp.buttonLeft.isPressed())
+        // DrawString(1, 40, "LEFT ");
 
-    if (bp.buttonRight.isPressed())
-        DrawString(1, 40, "RIGHT");
+    // if (bp.buttonRight.isPressed())
+        // DrawString(1, 40, "RIGHT");
 
-    if (bp.buttonDown.isPressed())
+    if (bp.buttonB.isPressed())
         DrawString(1, 40, "DOWN ");
 }
 
