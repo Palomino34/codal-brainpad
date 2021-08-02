@@ -1,4 +1,4 @@
-#include "MMA8453.h"
+#include "MC3216.h"
 #include "CodalConfig.h"
 #include "ErrorNo.h"
 #include "CodalCompat.h"
@@ -22,7 +22,7 @@ static const KeyValueTableEntry rangeDivisorData[] = {
 CREATE_KEY_VALUE_TABLE(rangeRegister, rangeRegisterData);
 CREATE_KEY_VALUE_TABLE(rangeDivisor, rangeDivisorData);
 
-MMA8453::MMA8453(codal::I2C& _i2c, Pin& _int1, CoordinateSpace& coordinateSpace, uint16_t address, uint16_t id) : Accelerometer(coordinateSpace, id), i2c(_i2c), int1(_int1) {
+MC3216::MC3216(codal::I2C& _i2c, Pin& _int1, CoordinateSpace& coordinateSpace, uint16_t address, uint16_t id) : Accelerometer(coordinateSpace, id), i2c(_i2c), int1(_int1) {
 
     this->address = address;
 	this->mylocker = false;
@@ -30,11 +30,11 @@ MMA8453::MMA8453(codal::I2C& _i2c, Pin& _int1, CoordinateSpace& coordinateSpace,
     configure();
 }
 
-MMA8453::~MMA8453() {
+MC3216::~MC3216() {
 
 }
 
-void MMA8453::writeRegister(uint8_t reg, uint8_t val) {
+void MC3216::writeRegister(uint8_t reg, uint8_t val) {
     uint8_t data[2];
 
     data[0] = reg;
@@ -46,7 +46,7 @@ void MMA8453::writeRegister(uint8_t reg, uint8_t val) {
 	i2c.write(address, data, 2, 0);
 }
 
-int MMA8453::updateSample() {
+int MC3216::updateSample() {
     if (this->mylocker) {
 		// while (this->mylocker) {
 			// wait_ms(1);
@@ -89,7 +89,7 @@ int MMA8453::updateSample() {
     return DEVICE_OK;
 }
 
-int MMA8453::configure() {
+int MC3216::configure() {
     writeRegister(CTRL_REG1, CTRL_REG1_SLEEP);
 
     writeRegister(XYZ_DATA_CFG, rangeRegister.get(getRange()));
@@ -100,12 +100,12 @@ int MMA8453::configure() {
     return DEVICE_OK;
 }
 
-int MMA8453::requestUpdate() {
+int MC3216::requestUpdate() {
     updateSample();
 
     return DEVICE_OK;
 }
 
-void MMA8453::idleCallback() {
+void MC3216::idleCallback() {
     updateSample();
 }

@@ -39,7 +39,7 @@
 
 
 namespace codal {
-    class MMA8453 : public Accelerometer {
+    class MC3216 : public Accelerometer {
         codal::I2C& i2c;
         Pin& int1;
         uint16_t          address;
@@ -48,8 +48,8 @@ namespace codal {
         void writeRegister(uint8_t reg, uint8_t val);
 
     public:
-        MMA8453(codal::I2C& _i2c, Pin& int1, CoordinateSpace& coordinateSpace, uint16_t address = MMA8453_DEFAULT_ADDR, uint16_t id = DEVICE_ID_ACCELEROMETER);
-        ~MMA8453();
+        MC3216(codal::I2C& _i2c, Pin& int1, CoordinateSpace& coordinateSpace, uint16_t address = MMA8453_DEFAULT_ADDR, uint16_t id = DEVICE_ID_ACCELEROMETER);
+        ~MC3216();
 
         int updateSample();
         virtual int configure();
