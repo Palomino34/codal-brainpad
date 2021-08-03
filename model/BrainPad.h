@@ -49,7 +49,7 @@ DEALINGS IN THE SOFTWARE.
 #include "BrainPadDisplay.h"
 #include "BrainPadTemperatureSensor.h"
 #include "BrainPadLightSensor.h"
-#include "MMA8453.h"
+#include "MC3216.h"
 
 // Status flag values
 #define DEVICE_INITIALIZED                    0x01
@@ -75,7 +75,7 @@ namespace codal
             // Button                      buttonLeft;
             // Button                      buttonRight;
             CoordinateSpace             space;
-            MMA8453                     accelerometer;
+            MC3216                     accelerometer;
             BrainPadTemperatureSensor   temperatureSensor;
             BrainPadLightSensor         lightSensor;
 
