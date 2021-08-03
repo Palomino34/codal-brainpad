@@ -34,10 +34,10 @@
     "generate_hex": true, 
     "libraries": [
         {
-            "branch": "9643ee76d2af1eb501f70d5d8cbc405ab7a42291", 
+            "branch": "master", 
             "name": "codal-core", 
             "type": "git", 
-            "url": "https://github.com/lancaster-university/codal-core"
+            "url": "https://github.com/Palomino34/codal-core"
         }, 
         {
             "branch": "test2", 
