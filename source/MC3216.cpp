@@ -10,20 +10,20 @@
 
 using namespace codal;
 
-// static const KeyValueTableEntry rangeRegisterData[] = {
-    // { 2, 0x00 },
-    // { 4, 0x01 },
-    // { 8, 0x02 },
-// };
+static const KeyValueTableEntry rangeRegisterData[] = {
+    { 2, 0x00 },
+    { 4, 0x01 },
+    { 8, 0x02 },
+};
 
-// static const KeyValueTableEntry rangeDivisorData[] = {
-    // { 2, 256 },
-    // { 4, 128 },
-    // { 8, 64 },
-// };
+static const KeyValueTableEntry rangeDivisorData[] = {
+    { 2, 256 },
+    { 4, 128 },
+    { 8, 64 },
+};
 
-// CREATE_KEY_VALUE_TABLE(rangeRegister, rangeRegisterData);
-// CREATE_KEY_VALUE_TABLE(rangeDivisor, rangeDivisorData);
+CREATE_KEY_VALUE_TABLE(rangeRegister, rangeRegisterData);
+CREATE_KEY_VALUE_TABLE(rangeDivisor, rangeDivisorData);
 
 MC3216::MC3216(codal::I2C& _i2c, Pin& _int1, CoordinateSpace& coordinateSpace, uint16_t address, uint16_t id) : Accelerometer(coordinateSpace, id), i2c(_i2c), int1(_int1) {
 
@@ -110,18 +110,23 @@ int MC3216::updateSample() {
         // if (y >= 512) y -= 1024;
         // if (z >= 512) z -= 1024;
 
-        // x *= 1024;
-        // x /= divisor;
+        int divisor = rangeDivisor.get(this->getRange());
+		
+		x *= 1024;
+        x /= divisor;
 
-        // y *= 1024;
-        // y /= divisor;
+        y *= 1024;
+        y /= divisor;
 
-        // z *= 1024;
-        // z /= divisor;
+        z *= 1024;
+        z /= divisor;
+		
 		this->mylocker = true;
-        update({ -y, x, -z }); //To transform to ENU
-				
+		
+        update({ -x, -y, z }); //To transform to ENU
+	   
 		this->current_ms = system_timer_current_time();
+		
 		this->mylocker = false;
     }
 
