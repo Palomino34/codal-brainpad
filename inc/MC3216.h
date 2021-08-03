@@ -6,8 +6,6 @@
 #include "I2C.h"
 #include "Accelerometer.h"
 
-#define ACCEL_G428 1
-
 #ifdef ACCEL_G428
 #define MC3216_DEFAULT_ADDR  (0x1C << 1)
 #else
