@@ -72,19 +72,36 @@ int MC3216::updateSample() {
 
     if (system_timer_current_time() - 100 > this->current_ms) {
 		
-		uint8_t dataX[1];
-		uint8_t dataY[1];
-		uint8_t dataZ[1];
-		 
-        i2c.readRegister(address, MC3216_XOut, dataX, 1);		
-		int32_t x = dataX[0];
+#ifdef ACCEL_G428
+		uint8_t read[6];
 		
-		i2c.readRegister(address, MC3216_YOut, dataY, 1);		
-		int32_t y = dataY[0];
+		i2c.readRegister(address, 1, read, 6);
 		
-		i2c.readRegister(address, MC3216_ZOut, dataZ, 1);		
-		int32_t z = dataZ[0];
+		int32_t x = read[0] << 2 | read[1] >> 6 & 0x3F;
+		if (x > 511)
+			x = x - 1024;
 
+		int32_t y = read[2] << 2 | read[3] >> 6 & 0x3F;
+		if (y > 511)
+			y = y - 1024;
+
+		int32_t z = read[4] << 2 | read[5] >> 6 & 0x3F;
+		if (z > 511)
+			z = z - 1024;
+#else		
+		// uint8_t dataX[1];
+		// uint8_t dataY[1];
+		// uint8_t dataZ[1];
+		 
+        // i2c.readRegister(address, MC3216_XOut, dataX, 1);		
+		// int32_t x = dataX[0];
+		
+		// i2c.readRegister(address, MC3216_YOut, dataY, 1);		
+		// int32_t y = dataY[0];
+		
+		// i2c.readRegister(address, MC3216_ZOut, dataZ, 1);		
+		// int32_t z = dataZ[0];
+#endif
         // int32_t x = (data[0] << 2) | (data[1] >> 6);
         // int32_t y = (data[2] << 2) | (data[3] >> 6);
         // int32_t z = (data[4] << 2) | (data[5] >> 6);
@@ -118,17 +135,19 @@ int MC3216::configure() {
     // writeRegister(CTRL_REG4, CTRL_REG4_INT_DATA);
     // writeRegister(CTRL_REG5, CTRL_REG5_SET_INT_PIN);
     // writeRegister(CTRL_REG1, CTRL_REG1_ACTIVE);
+#ifdef ACCEL_G428	
+	//uint8_t data[1];
 	
-	uint8_t data[1];
+	 writeRegister(0x2A, 1);
+#else	
+	// writeRegister(MC3216_Outcfg, 2);
+	// writeRegister(MC3216_Mode, 1);
 	
-	writeRegister(MC3216_Outcfg, 2);
-	writeRegister(MC3216_Mode, 1);
+	// i2c.readRegister(address, MC3216_Opstat, data, 1);
 	
-	i2c.readRegister(address, MC3216_Opstat, data, 1);
-	
-	if ((data[0] & 0x1) != 0x1 )
-		while(1);
-
+	// if ((data[0] & 0x1) != 0x1 )
+		// while(1);
+#endif
     return DEVICE_OK;
 }
 
