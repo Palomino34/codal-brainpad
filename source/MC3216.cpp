@@ -10,20 +10,20 @@
 
 using namespace codal;
 
-// static const KeyValueTableEntry rangeRegisterData[] = {
-    // { 2, 0x00 },
-    // { 4, 0x01 },
-    // { 8, 0x02 },
-// };
+static const KeyValueTableEntry rangeRegisterData[] = {
+    { 2, 0x00 },
+    { 4, 0x01 },
+    { 8, 0x02 },
+};
 
-// static const KeyValueTableEntry rangeDivisorData[] = {
-    // { 2, 256 },
-    // { 4, 128 },
-    // { 8, 64 },
-// };
+static const KeyValueTableEntry rangeDivisorData[] = {
+    { 2, 256 },
+    { 4, 128 },
+    { 8, 64 },
+};
 
-// CREATE_KEY_VALUE_TABLE(rangeRegister, rangeRegisterData);
-// CREATE_KEY_VALUE_TABLE(rangeDivisor, rangeDivisorData);
+CREATE_KEY_VALUE_TABLE(rangeRegister, rangeRegisterData);
+CREATE_KEY_VALUE_TABLE(rangeDivisor, rangeDivisorData);
 
 MC3216::MC3216(codal::I2C& _i2c, Pin& _int1, CoordinateSpace& coordinateSpace, uint16_t address, uint16_t id) : Accelerometer(coordinateSpace, id), i2c(_i2c), int1(_int1) {
 
@@ -72,6 +72,23 @@ int MC3216::updateSample() {
 
     if (system_timer_current_time() - 100 > this->current_ms) {
 		
+#ifdef ACCEL_G428
+		uint8_t read[6];
+		
+		i2c.readRegister(address, 1, read, 6);
+		
+		int32_t x = read[0] << 2 | read[1] >> 6 & 0x3F;
+		if (x > 511)
+			x = x - 1024;
+
+		int32_t y = read[2] << 2 | read[3] >> 6 & 0x3F;
+		if (y > 511)
+			y = y - 1024;
+
+		int32_t z = read[4] << 2 | read[5] >> 6 & 0x3F;
+		if (z > 511)
+			z = z - 1024;
+#else		
 		uint8_t dataX[1];
 		uint8_t dataY[1];
 		uint8_t dataZ[1];
@@ -84,7 +101,7 @@ int MC3216::updateSample() {
 		
 		i2c.readRegister(address, MC3216_ZOut, dataZ, 1);		
 		int32_t z = dataZ[0];
-
+#endif
         // int32_t x = (data[0] << 2) | (data[1] >> 6);
         // int32_t y = (data[2] << 2) | (data[3] >> 6);
         // int32_t z = (data[4] << 2) | (data[5] >> 6);
@@ -93,18 +110,23 @@ int MC3216::updateSample() {
         // if (y >= 512) y -= 1024;
         // if (z >= 512) z -= 1024;
 
-        // x *= 1024;
-        // x /= divisor;
+        int divisor = rangeDivisor.get(this->getRange());
+		
+		x *= 1024;
+        x /= divisor;
 
-        // y *= 1024;
-        // y /= divisor;
+        y *= 1024;
+        y /= divisor;
 
-        // z *= 1024;
-        // z /= divisor;
+        z *= 1024;
+        z /= divisor;
+		
 		this->mylocker = true;
-        update({ -y, x, -z }); //To transform to ENU
-				
+		
+        update({ -x, -y, z }); //To transform to ENU
+	   
 		this->current_ms = system_timer_current_time();
+		
 		this->mylocker = false;
     }
 
@@ -118,17 +140,20 @@ int MC3216::configure() {
     // writeRegister(CTRL_REG4, CTRL_REG4_INT_DATA);
     // writeRegister(CTRL_REG5, CTRL_REG5_SET_INT_PIN);
     // writeRegister(CTRL_REG1, CTRL_REG1_ACTIVE);
-	
+#ifdef ACCEL_G428	
+
+	 writeRegister(0x2A, 1);
+#else			
 	uint8_t data[1];
-	
+
 	writeRegister(MC3216_Outcfg, 2);
 	writeRegister(MC3216_Mode, 1);
 	
 	i2c.readRegister(address, MC3216_Opstat, data, 1);
 	
-	if ((data[0] & 0x1) != 0x1 )
-		while(1);
-
+	// if ((data[0] & 0x1) != 0x1 )
+		// while(1);
+#endif
     return DEVICE_OK;
 }
 
