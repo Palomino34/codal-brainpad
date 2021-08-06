@@ -109,21 +109,20 @@ int MC3216::updateSample() {
         // if (x >= 512) x -= 1024;
         // if (y >= 512) y -= 1024;
         // if (z >= 512) z -= 1024;
-
-        int divisor = rangeDivisor.get(this->getRange());
+       
 		
-		x *= 1024;
-        x /= divisor;
-
-        y *= 1024;
-        y /= divisor;
-
-        z *= 1024;
-        z /= divisor;
+		double dx = ((x + 128.0) / 256.0) * 1024;
+		double dy = ((y + 128.0) / 256.0) * 1024;
+		double dz = ((z + 128.0) / 256.0) * 1024;
+		
+		x = (int32_t)dx;
+		y = (int32_t)dy;
+		z = (int32_t)dz;
+        
 		
 		this->mylocker = true;
 		
-        update({ -x, -y, z }); //To transform to ENU
+        update({ x, y, z }); //To transform to ENU
 	   
 		this->current_ms = system_timer_current_time();
 		
