@@ -89,35 +89,22 @@ int MC3216::updateSample() {
 		if (z > 511)
 			z = z - 1024;
 #else		
-		uint8_t dataX[1];
-		uint8_t dataY[1];
-		uint8_t dataZ[1];
-		 
-        i2c.readRegister(address, MC3216_XOut, dataX, 1);		
-		int32_t x = dataX[0];
-		
-		i2c.readRegister(address, MC3216_YOut, dataY, 1);		
-		int32_t y = dataY[0];
-		
-		i2c.readRegister(address, MC3216_ZOut, dataZ, 1);		
-		int32_t z = dataZ[0];
-#endif
-        // int32_t x = (data[0] << 2) | (data[1] >> 6);
-        // int32_t y = (data[2] << 2) | (data[3] >> 6);
-        // int32_t z = (data[4] << 2) | (data[5] >> 6);
+		uint8_t data[1];
 
-        // if (x >= 512) x -= 1024;
-        // if (y >= 512) y -= 1024;
-        // if (z >= 512) z -= 1024;
-       
+        i2c.readRegister(address, MC3216_XOut, data, 1);		
+		int32_t x = data[0];
 		
-		double dx = ((x + 128.0) / 256.0) * 1024;
-		double dy = ((y + 128.0) / 256.0) * 1024;
-		double dz = ((z + 128.0) / 256.0) * 1024;
+		i2c.readRegister(address, MC3216_YOut, data, 1);		
+		int32_t y = data[0];
 		
-		x = (int32_t)dx;
-		y = (int32_t)dy;
-		z = (int32_t)dz;
+		i2c.readRegister(address, MC3216_ZOut, data, 1);		
+		int32_t z = data[0];
+#endif
+		
+		
+		if (x > 127) x -= 256;
+        if (y > 127) y -= 256;
+        if (z > 127) z -= 256;
         
 		
 		this->mylocker = true;
@@ -148,10 +135,11 @@ int MC3216::configure() {
 	writeRegister(MC3216_Outcfg, 2);
 	writeRegister(MC3216_Mode, 1);
 	
+wait_wake:
 	i2c.readRegister(address, MC3216_Opstat, data, 1);
 	
-	// if ((data[0] & 0x1) != 0x1 )
-		// while(1);
+	if ((data[0] & 0x1) != 0x1 )
+		goto wait_wake;
 #endif
     return DEVICE_OK;
 }
