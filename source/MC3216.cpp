@@ -25,6 +25,7 @@ static const KeyValueTableEntry rangeDivisorData[] = {
 CREATE_KEY_VALUE_TABLE(rangeRegister, rangeRegisterData);
 CREATE_KEY_VALUE_TABLE(rangeDivisor, rangeDivisorData);
 
+
 MC3216::MC3216(codal::I2C& _i2c, Pin& _int1, CoordinateSpace& coordinateSpace, uint16_t address, uint16_t id) : Accelerometer(coordinateSpace, id), i2c(_i2c), int1(_int1) {
 
     this->address = address;
@@ -100,12 +101,26 @@ int MC3216::updateSample() {
 		i2c.readRegister(address, MC3216_ZOut, data, 1);		
 		int32_t z = data[0];
 #endif
-		
+				
 		
 		if (x > 127) x -= 256;
         if (y > 127) y -= 256;
         if (z > 127) z -= 256;
-        
+		
+
+		x = x * 1024 / 64;
+		y = y * 1024 / 64;
+		z = z * 1024 / 64;
+		
+		x = x > 1024 ? 1024: x;
+		y = y > 1024 ? 1024: y;
+		z = z > 1024 ? 1024: z;
+		
+		
+		x = x < -1024 ? -1024: x;
+		y = y < -1024 ? -1024: y;
+		z = z < -1024 ? -1024: z;
+		
 		
 		this->mylocker = true;
 		
