@@ -1,4 +1,4 @@
-project(codal-brainpad)
+project(codal-brainpadpulse)
 
 include("${CODAL_UTILS_LOCATION}")
 
