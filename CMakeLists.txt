@@ -22,13 +22,13 @@ set(CMAKE_SYSTEM_PROCESSOR "armv7-m" PARENT_SCOPE)
 include_directories(${INCLUDE_DIRS} ${TOP_LEVEL_INCLUDE_DIRS} ${MODEL_INCLUDE_DIRS})
 
 # create our target
-add_library(codal-brainpad ${TOP_LEVEL_SOURCE_FILES} ${MODEL_SOURCE_FILES} ${MODEL_SAMPLES_FILES})
+add_library(codal-brainpadpulse ${TOP_LEVEL_SOURCE_FILES} ${MODEL_SOURCE_FILES} ${MODEL_SAMPLES_FILES})
 
 target_link_libraries(
-    codal-brainpad
+    codal-brainpadpulse
     codal-core
     codal-mbedos
 )
 
 # expose it to parent cmake.
-target_include_directories(codal-brainpad PUBLIC ${MODEL_INCLUDE_DIRS} ${TOP_LEVEL_INCLUDE_DIRS})
+target_include_directories(codal-brainpadpulse PUBLIC ${MODEL_INCLUDE_DIRS} ${TOP_LEVEL_INCLUDE_DIRS})
