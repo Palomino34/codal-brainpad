@@ -150,11 +150,11 @@ int MC3216::configure() {
 	writeRegister(MC3216_Outcfg, 2);
 	writeRegister(MC3216_Mode, 1);
 	
-wait_wake:
-	i2c.readRegister(address, MC3216_Opstat, data, 1);
+// wait_wake:
+	// i2c.readRegister(address, MC3216_Opstat, data, 1);
 	
-	if ((data[0] & 0x1) != 0x1 )
-		goto wait_wake;
+	// if ((data[0] & 0x1) != 0x1 )
+		// goto wait_wake;
 #endif
     return DEVICE_OK;
 }
