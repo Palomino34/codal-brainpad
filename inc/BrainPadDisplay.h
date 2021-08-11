@@ -11,6 +11,7 @@
 
 #define DISPLAY_DEFAULT_ADDRESS 0x78
 #define RESET_PIN_NAME PB_2
+#define BRAINPADPULSE 1
 
 #ifdef BRAINPADPULSE
 namespace codal {
