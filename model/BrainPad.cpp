@@ -41,11 +41,7 @@ BrainPad::BrainPad() :
     messageBus(),
     io(),
     i2c(io.sda, io.scl),
-#ifdef BRAINPADPULSE	
     lcd(i2c),
-#else
-	lcd(),
-#endif	
     buttonA(io.buttonA, ID_PIN_BUTTON_A, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW, PullMode::Up),
     buttonB(io.buttonB, ID_PIN_BUTTON_B, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW, PullMode::Up),
     // buttonLeft(io.buttonLeft, ID_PIN_BUTTON_LEFT, DEVICE_BUTTON_ALL_EVENTS, ACTIVE_LOW, PullMode::Up),

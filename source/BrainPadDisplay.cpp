@@ -2,8 +2,6 @@
 
 using namespace codal;
 
-#ifdef BRAINPADPULSE
-
 const int BrainPadDisplay::vramSize;
 
 BrainPadDisplay::BrainPadDisplay(codal::I2C& _i2c, uint16_t address) : i2c(_i2c) {
@@ -85,31 +83,3 @@ void BrainPadDisplay::writeScreenBuffer(uint8_t* buffer) {
 
     flush();
 }
-#else
-BrainPadDisplay::BrainPadDisplay()  {
-	
-	const uint32_t pinArray[] = { BRAINPAD_TICK_LED1 , BRAINPAD_TICK_LED2 , BRAINPAD_TICK_LED3 , BRAINPAD_TICK_LED4 , BRAINPAD_TICK_LED5 ,
-								  BRAINPAD_TICK_LED6 , BRAINPAD_TICK_LED7 , BRAINPAD_TICK_LED8 , BRAINPAD_TICK_LED9 , BRAINPAD_TICK_LED10,
-								  BRAINPAD_TICK_LED11, BRAINPAD_TICK_LED12, BRAINPAD_TICK_LED13, BRAINPAD_TICK_LED14, BRAINPAD_TICK_LED15, 
-								  BRAINPAD_TICK_LED16, BRAINPAD_TICK_LED17, BRAINPAD_TICK_LED18, BRAINPAD_TICK_LED19, BRAINPAD_TICK_LED20,
-								  BRAINPAD_TICK_LED21, BRAINPAD_TICK_LED22, BRAINPAD_TICK_LED23, BRAINPAD_TICK_LED24, BRAINPAD_TICK_LED25};
-	for (int i = 0; i < 25; i++) {						
-		pixel[i] = new _mbed::Pin(0, pinArray[i], PIN_CAPABILITY_DIGITAL);
-	}
-}
-
-void BrainPadDisplay::flush() {
-    
-}
-
-void BrainPadDisplay::writeScreenBuffer(uint8_t* buffer) {    
-	for (int i = 0; i < 25; i++) {
-		if (buffer[i])
-			pixel[i]->setDigitalValue(1);
-		else 
-			pixel[i]->setDigitalValue(0);
-	}
-    
-}
-
-#endif	
